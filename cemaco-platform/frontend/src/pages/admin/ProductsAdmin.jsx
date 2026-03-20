@@ -11,7 +11,6 @@ const emptyForm = () => ({
   price: '',
   sku: '',
   inventory: '0',
-  imageUrl: '',
 })
 
 function apiErrorMessage(err) {
@@ -32,41 +31,44 @@ function isLowStockInventory(inv) {
   return Number(inv) < PUBLIC_STOCK_MIN
 }
 
-function ImagePlaceholder({ previewSrc, fileInputRef, onFileChange, inputId }) {
+function ImagePlaceholder({ previewSrc, fileInputRef, onFileChange, inputId, hint }) {
   return (
-    <div
-      className="admin-image-placeholder"
-      onClick={() => fileInputRef.current?.click()}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          fileInputRef.current?.click()
-        }
-      }}
-      role="button"
-      tabIndex={0}
-    >
-      <input
-        ref={fileInputRef}
-        id={inputId}
-        type="file"
-        accept="image/jpeg,image/png,image/gif,image/webp"
-        className="admin-image-placeholder-input"
-        aria-label="Seleccionar imagen"
-        onChange={onFileChange}
-      />
-      {previewSrc ? (
-        <img src={previewSrc} alt="" className="admin-image-placeholder-img" />
-      ) : (
-        <div className="admin-image-placeholder-inner">
-          <span className="admin-image-placeholder-icon" aria-hidden>
-            +
-          </span>
-          <span className="admin-image-placeholder-text">Imagen del producto</span>
-          <span className="admin-image-placeholder-hint">Toca para elegir archivo</span>
-        </div>
-      )}
-    </div>
+    <>
+      <div
+        className="admin-image-placeholder"
+        onClick={() => fileInputRef.current?.click()}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            fileInputRef.current?.click()
+          }
+        }}
+        role="button"
+        tabIndex={0}
+      >
+        <input
+          ref={fileInputRef}
+          id={inputId}
+          type="file"
+          accept="image/jpeg,image/png,image/gif,image/webp"
+          className="admin-image-placeholder-input"
+          aria-label="Seleccionar imagen"
+          onChange={onFileChange}
+        />
+        {previewSrc ? (
+          <img src={previewSrc} alt="" className="admin-image-placeholder-img" />
+        ) : (
+          <div className="admin-image-placeholder-inner">
+            <span className="admin-image-placeholder-icon" aria-hidden>
+              +
+            </span>
+            <span className="admin-image-placeholder-text">Imagen del producto</span>
+            <span className="admin-image-placeholder-hint">Toca para elegir archivo</span>
+          </div>
+        )}
+      </div>
+      {hint ? <p className="admin-image-hint muted">{hint}</p> : null}
+    </>
   )
 }
 
@@ -168,10 +170,7 @@ export function ProductsAdmin() {
     setSaving(true)
     setCreateError(null)
     try {
-      let imageUrl = form.imageUrl.trim() || null
-      if (file) {
-        imageUrl = await uploadIfNeeded(file)
-      }
+      const imageUrl = file ? await uploadIfNeeded(file) : null
       await api.post('/products', {
         categoryId: form.categoryId,
         name: form.name,
@@ -199,7 +198,6 @@ export function ProductsAdmin() {
       price: String(p.price),
       sku: p.sku,
       inventory: String(p.inventory),
-      imageUrl: p.imageUrl ?? '',
     })
     setEditFile(null)
     setEditError(null)
@@ -224,7 +222,7 @@ export function ProductsAdmin() {
     setSaving(true)
     setEditError(null)
     try {
-      let imageUrl = editForm.imageUrl.trim() || null
+      let imageUrl = editing.imageUrl ?? null
       if (editFile) {
         imageUrl = await uploadIfNeeded(editFile)
       }
@@ -258,13 +256,10 @@ export function ProductsAdmin() {
     }
   }
 
-  const createPreviewDisplay =
-    filePreview ||
-    (form.imageUrl.trim() ? publicAssetUrl(form.imageUrl.trim()) : null)
+  const createPreviewDisplay = filePreview
 
   const editPreviewDisplay =
-    editFilePreview ||
-    (editing?.imageUrl && !editFile ? publicAssetUrl(editing.imageUrl) : null)
+    editFilePreview || (editing?.imageUrl ? publicAssetUrl(editing.imageUrl) : null)
 
   if (loading) return <p className="admin-loading">Cargando…</p>
 
@@ -370,24 +365,8 @@ export function ProductsAdmin() {
             previewSrc={createPreviewDisplay}
             fileInputRef={createFileRef}
             inputId="create-product-image"
-            onFileChange={(e) => {
-              setFile(e.target.files?.[0] ?? null)
-              setForm((f) => ({ ...f, imageUrl: '' }))
-            }}
+            onFileChange={(e) => setFile(e.target.files?.[0] ?? null)}
           />
-          <label className="span-2 admin-url-fallback">
-            O pega URL de imagen externa
-            <input
-              type="url"
-              value={form.imageUrl}
-              onChange={(e) => {
-                setForm((f) => ({ ...f, imageUrl: e.target.value }))
-                setFile(null)
-              }}
-              disabled={Boolean(file)}
-              placeholder="https://…"
-            />
-          </label>
           <div className="form-grid">
             <label className="span-2">
               Categoría *
@@ -488,20 +467,8 @@ export function ProductsAdmin() {
               fileInputRef={editFileRef}
               inputId="edit-product-image"
               onFileChange={(e) => setEditFile(e.target.files?.[0] ?? null)}
+              hint="Toca la imagen para subir un archivo nuevo. Si no eliges uno, se mantiene el actual."
             />
-            <label className="span-2 admin-url-fallback">
-              O URL de imagen externa
-              <input
-                type="url"
-                value={editForm.imageUrl}
-                onChange={(e) => {
-                  setEditForm((f) => ({ ...f, imageUrl: e.target.value }))
-                  setEditFile(null)
-                }}
-                disabled={Boolean(editFile)}
-                placeholder="https://…"
-              />
-            </label>
             <div className="form-grid">
               <label className="span-2">
                 Categoría *

@@ -29,7 +29,7 @@ public class CatalogController : ControllerBase
         CancellationToken cancellationToken)
     {
         var query = _db.Products.AsNoTracking().AsQueryable()
-            .Where(p => p.Inventory > MinInventoryForPublicDisplay);
+            .Where(p => p.Inventory >= MinInventoryForPublicDisplay);
 
         if (categoryId.HasValue)
             query = query.Where(p => p.CategoryId == categoryId.Value);

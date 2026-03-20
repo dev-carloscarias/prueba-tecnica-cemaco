@@ -1477,6 +1477,19 @@
   font-size: 0.9rem;
 }
 
+.login-demo-hint {
+  margin-top: 1rem;
+  line-height: 1.55;
+}
+
+.login-demo-hint .login-demo-line {
+  display: block;
+}
+
+.login-demo-hint .login-demo-line + .login-demo-line {
+  margin-top: 0.4rem;
+}
+
 /* Panel admin — dashboard y listas */
 .admin-dashboard-header h1 {
   margin: 0 0 0.35rem;
@@ -1876,16 +1889,7 @@
   margin-top: 0.25rem;
 }
 
-.admin-url-fallback {
+.admin-image-hint {
+  margin: 0.35rem 0 0.75rem;
   font-size: 0.85rem;
-  margin-bottom: 0.5rem;
-}
-
-.admin-url-fallback input {
-  margin-top: 0.25rem;
-  width: 100%;
-  padding: 0.45rem 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font: inherit;
 }

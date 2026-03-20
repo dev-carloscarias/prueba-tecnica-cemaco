@@ -61,9 +61,17 @@ export function AdminLogin() {
           {submitting ? 'Enviando…' : 'Entrar'}
         </button>
       </form>
-      <p className="hint muted">
-        Usuarios demo:· Admin: admin@cemaco.com ·  Password: Admin123! · Colaborador: colaborador@cemaco.com · Password: Colaborador123!
-      </p>
+      <div className="hint muted login-demo-hint">
+        <div className="login-demo-line">Usuarios demo:</div>
+        <div className="login-demo-line">Admin: admin@cemaco.com</div>
+        <div className="login-demo-line">Contraseña: Admin123!</div>
+        <div className="login-demo-line">
+          Colaborador: colaborador@cemaco.com
+        </div>
+        <div className="login-demo-line">
+          Contraseña: Colaborador123!
+        </div>
+      </div>
     </section>
   )
 }
