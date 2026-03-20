@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>CemacoPlatform.API</RootNamespace>
+    <AssemblyName>CemacoPlatform.API</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CemacoPlatform.Application\CemacoPlatform.Application.csproj" />
+    <ProjectReference Include="..\CemacoPlatform.Infrastructure\CemacoPlatform.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
