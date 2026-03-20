@@ -123,3 +123,17 @@ Levanta PostgreSQL, API (.NET) y frontend (Nginx con la SPA compilada).
 **Recrear la base desde cero**: `docker compose down -v` y luego `docker compose up --build` (borra el volumen de Postgres).
 
 ---
+### Archivo .env
+ ```bash
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_DB=cemaco
+POSTGRES_PORT=5432
+
+# Backend 
+DATABASE_URL=Host=localhost;Port=5432;Database=cemaco;Username=postgres;Password=postgres
+JWT_KEY=t8DWvNudUSOb4ciLyhW5i0lWGie5Qx5VRGqUuoaPMevxe4xL
+
+# Frontend 
+VITE_API_BASE_URL=http://localhost:8080
+```
